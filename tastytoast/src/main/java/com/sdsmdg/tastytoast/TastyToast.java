@@ -1,23 +1,24 @@
 package com.sdsmdg.tastytoast;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringSystem;
+import ohos.agp.colors.RgbPalette;
+import ohos.agp.components.Component;
+import ohos.agp.components.DirectionalLayout;
+import ohos.agp.components.LayoutScatter;
+import ohos.agp.components.Text;
+import ohos.agp.components.element.ShapeElement;
+import ohos.agp.utils.Color;
+import ohos.agp.utils.LayoutAlignment;
+import ohos.agp.window.dialog.ToastDialog;
+import ohos.app.Context;
 
-/**
- * Created by rahul on 28/7/16.
- */
 public class TastyToast {
-    public static final int LENGTH_SHORT = 0;
-    public static final int LENGTH_LONG = 1;
+
+    public static final int LENGTH_SHORT = 1000;
+    public static final int LENGTH_LONG = 2000;
 
 
     public static final int SUCCESS = 1;
@@ -29,35 +30,33 @@ public class TastyToast {
 
     static SuccessToastView successToastView;
     static WarningToastView warningToastView;
-    static ErrorToastView errorToastView;
-    static InfoToastView infoToastView;
-    static DefaultToastView defaultToastView;
-    static ConfusingToastView confusingToastView;
 
-    public static Toast makeText(Context context, String msg, int length, int type) {
 
-        Toast toast = new Toast(context);
 
+    public static ToastDialog makeText(Context context, String msg, int length, int type) {
+
+        ToastDialog toast = new ToastDialog(context);
+        toast.setDuration(length);
 
         switch (type) {
             case 1: {
-                View layout = LayoutInflater.from(context).inflate(R.layout.success_toast_layout, null, false);
-                TextView text = (TextView) layout.findViewById(R.id.toastMessage);
+                Component layout = LayoutScatter.getInstance(context).
+                        parse(ResourceTable.Layout_success_toast_layout, null, false);
+                Text text = (Text) layout.findComponentById(ResourceTable.Id_toastMessage);
                 text.setText(msg);
-                successToastView = (SuccessToastView) layout.findViewById(R.id.successView);
+                successToastView = (SuccessToastView) layout.findComponentById(ResourceTable.Id_successView);
                 successToastView.startAnim();
-                text.setBackgroundResource(R.drawable.success_toast);
-                text.setTextColor(Color.parseColor("#FFFFFF"));
-                toast.setView(layout);
+                text.setBackground(new ShapeElement(context, ResourceTable.Graphic_success_toast));
+                text.setTextColor(new Color(RgbPalette.parse("#FFFFFF")));
+                toast.setComponent(layout);
                 break;
             }
             case 2: {
-                View layout = LayoutInflater.from(context).inflate(R.layout.warning_toast_layout, null, false);
-
-                TextView text = (TextView) layout.findViewById(R.id.toastMessage);
+                Component layout = LayoutScatter.getInstance(context).
+                        parse(ResourceTable.Layout_warning_toast_layout, null, false);
+                Text text = (Text) layout.findComponentById(ResourceTable.Id_toastMessage);
                 text.setText(msg);
-
-                warningToastView = (WarningToastView) layout.findViewById(R.id.warningView);
+                warningToastView = (WarningToastView) layout.findComponentById(ResourceTable.Id_warningView);
                 SpringSystem springSystem = SpringSystem.create();
                 final Spring spring = springSystem.createSpring();
                 spring.setCurrentValue(1.8);
@@ -86,63 +85,16 @@ public class TastyToast {
                 });
 
                 t.start();
-                text.setBackgroundResource(R.drawable.warning_toast);
-                text.setTextColor(Color.parseColor("#FFFFFF"));
-                toast.setView(layout);
-                break;
-            }
-            case 3: {
-                View layout = LayoutInflater.from(context).inflate(R.layout.error_toast_layout, null, false);
 
-                TextView text = (TextView) layout.findViewById(R.id.toastMessage);
-                text.setText(msg);
-                errorToastView = (ErrorToastView) layout.findViewById(R.id.errorView);
-                errorToastView.startAnim();
-                text.setBackgroundResource(R.drawable.error_toast);
-                text.setTextColor(Color.parseColor("#FFFFFF"));
-                toast.setView(layout);
-                break;
-            }
-            case 4: {
-                View layout = LayoutInflater.from(context).inflate(R.layout.info_toast_layout, null, false);
-
-                TextView text = (TextView) layout.findViewById(R.id.toastMessage);
-                text.setText(msg);
-                infoToastView = (InfoToastView) layout.findViewById(R.id.infoView);
-                infoToastView.startAnim();
-                text.setBackgroundResource(R.drawable.info_toast);
-                text.setTextColor(Color.parseColor("#FFFFFF"));
-                toast.setView(layout);
-                break;
-            }
-            case 5: {
-                View layout = LayoutInflater.from(context).inflate(R.layout.default_toast_layout, null, false);
-
-                TextView text = (TextView) layout.findViewById(R.id.toastMessage);
-                text.setText(msg);
-                defaultToastView = (DefaultToastView) layout.findViewById(R.id.defaultView);
-                defaultToastView.startAnim();
-                text.setBackgroundResource(R.drawable.default_toast);
-                text.setTextColor(Color.parseColor("#FFFFFF"));
-                toast.setView(layout);
-                break;
-            }
-            case 6: {
-                View layout = LayoutInflater.from(context).inflate(R.layout.confusing_toast_layout, null, false);
-
-                TextView text = (TextView) layout.findViewById(R.id.toastMessage);
-                text.setText(msg);
-                confusingToastView = (ConfusingToastView) layout.findViewById(R.id.confusingView);
-                confusingToastView.startAnim();
-                text.setBackgroundResource(R.drawable.confusing_toast);
-                text.setTextColor(Color.parseColor("#FFFFFF"));
-                toast.setView(layout);
+                text.setBackground(new ShapeElement(context, ResourceTable.Graphic_warning_toast));
+                text.setTextColor(new Color(RgbPalette.parse("#FFFFFF")));
+                toast.setComponent(layout);
                 break;
             }
         }
-        toast.setDuration(length);
+
+        toast.setAlignment(LayoutAlignment.BOTTOM);
         toast.show();
         return toast;
     }
-
 }

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DependentLayout
+    xmlns:ohos="http://schemas.huawei.com/res/ohos"
+    ohos:height="match_parent"
+    ohos:width="match_parent"
+    ohos:background_element="#1253A2"
+    ohos:orientation="vertical"
+    ohos:padding="16vp">
+
+    <DirectionalLayout
+        ohos:id="$+id:first_row"
+        ohos:align_parent_top="true"
+        ohos:height="match_content"
+        ohos:width="match_parent"
+        ohos:orientation="horizontal">
+
+        <Button
+            ohos:id="$+id:button"
+            ohos:height="match_content"
+            ohos:width="match_content"
+            ohos:background_element="$graphic:background_ability_main"
+            ohos:layout_alignment="horizontal_center"
+            ohos:margin="3vp"
+            ohos:padding="5vp"
+            ohos:text="Download"
+            ohos:text_alignment="center"
+            ohos:text_size="18fp"
+            ohos:text_weight="500"
+            ohos:weight="1"
+            />
+
+        <Button
+            ohos:id="$+id:button2"
+            ohos:height="match_content"
+            ohos:width="match_content"
+            ohos:background_element="$graphic:background_ability_main"
+            ohos:layout_alignment="horizontal_center"
+            ohos:margin="3vp"
+            ohos:padding="5vp"
+            ohos:text="Warning"
+            ohos:text_alignment="center"
+            ohos:text_size="18fp"
+            ohos:text_weight="500"
+            ohos:weight="1"
+            />
+
+        <Button
+            ohos:id="$+id:button3"
+            ohos:height="match_content"
+            ohos:width="match_content"
+            ohos:background_element="$graphic:background_ability_main"
+            ohos:layout_alignment="horizontal_center"
+            ohos:margin="3vp"
+            ohos:padding="5vp"
+            ohos:text="Error"
+            ohos:text_alignment="center"
+            ohos:text_size="18fp"
+            ohos:text_weight="500"
+            ohos:weight="1"
+            />
+
+    </DirectionalLayout>
+
+    <DirectionalLayout
+        ohos:top_margin="12vp"
+        ohos:below="$id:first_row"
+        ohos:height="match_content"
+        ohos:width="match_parent"
+        ohos:orientation="horizontal">
+
+        <Button
+            ohos:id="$+id:button4"
+            ohos:height="match_content"
+            ohos:width="match_content"
+            ohos:background_element="$graphic:background_ability_main"
+            ohos:layout_alignment="horizontal_center"
+            ohos:margin="3vp"
+            ohos:padding="5vp"
+            ohos:text="Info"
+            ohos:text_alignment="center"
+            ohos:text_size="18fp"
+            ohos:text_weight="500"
+            ohos:weight="1"
+            />
+
+        <Button
+            ohos:id="$+id:button5"
+            ohos:height="match_content"
+            ohos:width="match_content"
+            ohos:background_element="$graphic:background_ability_main"
+            ohos:layout_alignment="horizontal_center"
+            ohos:margin="3vp"
+            ohos:padding="5vp"
+            ohos:text="Default"
+            ohos:text_alignment="center"
+            ohos:text_size="18fp"
+            ohos:text_weight="500"
+            ohos:weight="1"
+            />
+
+        <Button
+            ohos:id="$+id:button6"
+            ohos:height="match_content"
+            ohos:width="match_content"
+            ohos:background_element="$graphic:background_ability_main"
+            ohos:layout_alignment="horizontal_center"
+            ohos:margin="3vp"
+            ohos:padding="5vp"
+            ohos:text="Confusion"
+            ohos:text_alignment="center"
+            ohos:text_size="18fp"
+            ohos:text_weight="500"
+            ohos:weight="1"
+            />
+
+    </DirectionalLayout>
+
+</DependentLayout>

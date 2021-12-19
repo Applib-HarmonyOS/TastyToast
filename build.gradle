@@ -1,25 +1,49 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply plugin: 'com.huawei.ohos.app'
+
+//For instructions on signature configuration, see https://developer.harmonyos.com/en/docs/documentation/doc-guides/ide_debug_device-0000001053822404#EN-US_TOPIC_0000001154985555__section1112183053510
+ohos {
+    signingConfigs {
+        debug {
+            storeFile file('C:\\Users\\admin\\.ohos\\config\\auto_debug_2640091000002771297.p12')
+            storePassword '00000018C79D846A98A6B2A27FC93542BAC2323F05CF1A38DDFFB8BF37D6273F72B84EC5D669DF25'
+            keyAlias = 'debugKey'
+            keyPassword '0000001803E11F282AFA8CD31BCA58D89BDC457086F3D9B4C5DCAA2E86EA291804460AE5F8CB2355'
+            signAlg = 'SHA256withECDSA'
+            profile file('C:\\Users\\admin\\.ohos\\config\\auto_debug_demoexample_2640091000002771297.p7b')
+            certpath file('C:\\Users\\admin\\.ohos\\config\\auto_debug_2640091000002771297.cer')
+        }
+    }
+    compileSdkVersion 5
+    defaultConfig {
+        compatibleSdkVersion 5
+    }
+}
 
 buildscript {
     repositories {
+        maven {
+            url 'https://repo.huaweicloud.com/repository/maven/'
+        }
+        maven {
+            url 'https://developer.huawei.com/repo/'
+        }
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath 'com.huawei.ohos:hap:2.4.4.2'
+        classpath 'com.huawei.ohos:decctest:1.2.4.0'
     }
 }
 
 allprojects {
     repositories {
+        maven {
+            url 'https://repo.huaweicloud.com/repository/maven/'
+        }
+        maven {
+            url 'https://developer.huawei.com/repo/'
+        }
         jcenter()
     }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }
