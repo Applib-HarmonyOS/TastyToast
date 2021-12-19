@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.sdsmdg.tastytoast;
+package com.sdsmdg.tastytoast.util;
 
 import ohos.hiviewdfx.HiLog;
 import ohos.hiviewdfx.HiLogLabel;

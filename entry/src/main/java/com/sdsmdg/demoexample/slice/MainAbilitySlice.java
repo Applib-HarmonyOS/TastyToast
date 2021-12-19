@@ -26,6 +26,22 @@ public class MainAbilitySlice extends AbilitySlice {
                         TastyToast.WARNING);
             }
         });
+
+        findComponentById(ResourceTable.Id_button3).setClickedListener(new Component.ClickedListener() {
+            @Override
+            public void onClick(Component component) {
+                TastyToast.makeText(getApplicationContext(), "Downloading failed ! Try again later ", TastyToast.LENGTH_LONG,
+                        TastyToast.ERROR);
+            }
+        });
+
+        findComponentById(ResourceTable.Id_button4).setClickedListener(new Component.ClickedListener() {
+            @Override
+            public void onClick(Component component) {
+                TastyToast.makeText(getApplicationContext(), "Searching for username : 'Rahul' ", TastyToast.LENGTH_LONG,
+                        TastyToast.INFO);
+            }
+        });
     }
 
     @Override

@@ -30,6 +30,8 @@ public class TastyToast {
 
     static SuccessToastView successToastView;
     static WarningToastView warningToastView;
+    static ErrorToastView errorToastView;
+    static InfoToastView infoToastView;
 
 
 
@@ -57,6 +59,7 @@ public class TastyToast {
                 Text text = (Text) layout.findComponentById(ResourceTable.Id_toastMessage);
                 text.setText(msg);
                 warningToastView = (WarningToastView) layout.findComponentById(ResourceTable.Id_warningView);
+
                 SpringSystem springSystem = SpringSystem.create();
                 final Spring spring = springSystem.createSpring();
                 spring.setCurrentValue(1.8);
@@ -83,7 +86,6 @@ public class TastyToast {
                         spring.setEndValue(0.4f);
                     }
                 });
-
                 t.start();
 
                 text.setBackground(new ShapeElement(context, ResourceTable.Graphic_warning_toast));
@@ -91,6 +93,32 @@ public class TastyToast {
                 toast.setComponent(layout);
                 break;
             }
+            case 3: {
+                Component layout = LayoutScatter.getInstance(context).
+                        parse(ResourceTable.Layout_error_toast_layout, null, false);
+                Text text = (Text) layout.findComponentById(ResourceTable.Id_toastMessage);
+                text.setText(msg);
+                errorToastView = (ErrorToastView) layout.findComponentById(ResourceTable.Id_errorView);
+                errorToastView.startAnim();
+                text.setBackground(new ShapeElement(context, ResourceTable.Graphic_error_toast));
+                text.setTextColor(new Color(RgbPalette.parse("#FFFFFF")));
+                toast.setComponent(layout);
+                break;
+            }
+
+            case 4: {
+                Component layout = LayoutScatter.getInstance(context).
+                        parse(ResourceTable.Layout_info_toast_layout, null, false);
+                Text text = (Text) layout.findComponentById(ResourceTable.Id_toastMessage);
+                text.setText(msg);
+                infoToastView = (InfoToastView) layout.findComponentById(ResourceTable.Id_infoView);
+                infoToastView.startAnim();
+                text.setBackground(new ShapeElement(context, ResourceTable.Graphic_info_toast));
+                text.setTextColor(new Color(RgbPalette.parse("#FFFFFF")));
+                toast.setComponent(layout);
+                break;
+            }
+
         }
 
         toast.setAlignment(LayoutAlignment.BOTTOM);

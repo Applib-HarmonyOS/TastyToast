@@ -100,8 +100,8 @@ public class WarningToastView extends Component implements Component.EstimateSiz
                 (float) (mHeight - AttrHelper.vp2px(2, mContext) - mHeight / 2.5), mPaint);
 
 
-        canvas.drawArc(rectFOne, new Arc(170, 180, false), mPaint);
-        canvas.drawArc(rectFOne, new Arc(175, -150, false), mPaint);
+        canvas.drawArc(rectFTwo, new Arc(170, 180, false), mPaint);
+        canvas.drawArc(rectFThree, new Arc(175, -150, false), mPaint);
     }
 
 }
