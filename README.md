@@ -1,11 +1,9 @@
 # TastyToast
 
-[![platform](https://img.shields.io/badge/platform-Android-yellow.svg)](https://www.android.com)
-[![API](https://img.shields.io/badge/API-11%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=11)
-[![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg?style=flat-square)](https://www.apache.org/licenses/LICENSE-2.0.html)
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-TastyToast-red.svg?style=flat)](http://android-arsenal.com/details/1/4039)
+[![Build](https://github.com/applibgroup/TastyToast/actions/workflows/main.yml/badge.svg)](https://github.com/applibgroup/TastyToast/actions/workflows/main.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=applibgroup_TastyToast&metric=alert_status)](https://sonarcloud.io/dashboard?id=applibgroup_TastyToast)
 
-Make your native android toast look beautiful.
+Make your native HMOS toast look beautiful.
 
 ## Preview
 ![gif](https://github.com/yadav-rahul/TastyToast/blob/lib/static/success.gif)
@@ -15,22 +13,22 @@ Make your native android toast look beautiful.
 ![gif](https://github.com/yadav-rahul/TastyToast/blob/lib/static/default.gif)
 ![gif](https://github.com/yadav-rahul/TastyToast/blob/lib/static/confusion.gif)
 
-## About
+# Source
+This library has been inspired by [yadav-rahul/TastyToast](https://github.com/yadav-rahul/TastyToast).
 
-Refer Here [Wiki](https://github.com/yadav-rahul/TastyToast/wiki)
+## Integration
 
-Grab the above demo app from here :
-
-[![Get it on Google Play](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://play.google.com/store/apps/details?id=com.demo.tastytoast)
-
-## Dependency
-
-Add dependency in your app module
-
+1. For using TastyToast module in sample app, include the source code and add the below dependencies in entry/build.gradle to generate hap/support.har.
 ```
-dependencies {
-	compile 'com.sdsmdg.tastytoast:tastytoast:0.1.1'
-}
+ implementation project(path: ':tastytoast')
+```
+2. For using TastyToast module in separate application using har file, add the har file in the entry/libs folder and add the dependencies in entry/build.gradle file.
+```
+ implementation fileTree(dir: 'libs', include: ['*.har'])
+```
+3. For using TastyToast module from a remote repository in separate application, add the below dependencies in entry/build.gradle file.
+```
+implementation 'dev.applibgroup:TastyToast:1.0.0'
 ```
 
 ## Usage
@@ -41,13 +39,6 @@ TastyToast.makeText(getApplicationContext(), "Hello World !", TastyToast.LENGTH_
 ```
 Last parameter here is the type of toast you want to show.
 
-## Contributing
-
-Please fork this repository and contribute back using
-[pull requests](https://github.com/yadav-rahul/TastyToast/pulls).
-
-Any contributions, large or small, major features, bug fixes, are welcomed and appreciated
-but will be thoroughly reviewed .
 
 ## License
 
