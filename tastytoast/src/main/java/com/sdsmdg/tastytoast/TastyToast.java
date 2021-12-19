@@ -82,6 +82,7 @@ public class TastyToast {
                         try {
                             Thread.sleep(500);
                         } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
                         }
                         spring.setEndValue(0.4f);
                     }
