@@ -6,50 +6,43 @@ import ohos.agp.colors.RgbPalette;
 import ohos.agp.components.AttrHelper;
 import ohos.agp.components.AttrSet;
 import ohos.agp.components.Component;
-import ohos.agp.render.Arc;
 import ohos.agp.render.Canvas;
 import ohos.agp.render.Paint;
 import ohos.agp.utils.Color;
-import ohos.agp.utils.RectFloat;
 import ohos.app.Context;
 
-public class SuccessToastView extends Component implements Component.EstimateSizeListener, Component.DrawTask {
+public class DefaultToastView extends Component implements Component.EstimateSizeListener, Component.DrawTask {
 
-    RectFloat rectF = new RectFloat();
     ValueAnimator valueAnimator;
     float mAnimatedValue = 0f;
-    private Paint mPaint;
+    private Paint mPaint, mSpikePaint;
     private float mWidth = 0f;
-    private float mEyeWidth = 0f;
     private float mPadding = 0f;
-    private float endAngle = 0f;
-    private boolean isSmileLeft = false;
-    private boolean isSmileRight = false;
+    private float mSpikeLength;
 
-    public SuccessToastView(Context context) {
+    public DefaultToastView(Context context) {
         super(context);
         initialize();
     }
 
-    public SuccessToastView(Context context, AttrSet attrSet) {
+    public DefaultToastView(Context context, AttrSet attrSet) {
         super(context, attrSet);
         initialize();
     }
 
-    public SuccessToastView(Context context, AttrSet attrSet, String styleName) {
+    public DefaultToastView(Context context, AttrSet attrSet, String styleName) {
         super(context, attrSet, styleName);
         initialize();
     }
 
-    public SuccessToastView(Context context, AttrSet attrSet, int resId) {
+    public DefaultToastView(Context context, AttrSet attrSet, int resId) {
         super(context, attrSet, resId);
         initialize();
     }
 
     private void initialize() {
         mWidth = getWidth();
-        mPadding = AttrHelper.vp2px(10, mContext);
-        mEyeWidth = AttrHelper.vp2px(3, mContext);
+        mPadding = AttrHelper.vp2px(5, mContext);
         setEstimateSizeListener(this);
         addDrawTask(this);
     }
@@ -58,7 +51,6 @@ public class SuccessToastView extends Component implements Component.EstimateSiz
     @Override
     public boolean onEstimateSize(int i, int i1) {
         initPaint();
-        initRect();
         return false;
     }
 
@@ -66,26 +58,34 @@ public class SuccessToastView extends Component implements Component.EstimateSiz
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.STROKE_STYLE);
-        mPaint.setColor(new Color(RgbPalette.parse("#5cb85c")));
+        mPaint.setColor(new Color(RgbPalette.parse("#222222")));
         mPaint.setStrokeWidth(AttrHelper.vp2px(2, mContext));
-    }
 
-    private void initRect() {
-        rectF = new RectFloat(mPadding, mPadding, mWidth - mPadding, mWidth - mPadding);
+        mSpikePaint = new Paint();
+        mSpikePaint.setAntiAlias(true);
+        mSpikePaint.setStyle(Paint.Style.STROKE_STYLE);
+        mSpikePaint.setColor(new Color(RgbPalette.parse("#222222")));
+        mSpikePaint.setStrokeWidth(AttrHelper.vp2px(4, mContext));
+
+        mSpikeLength = AttrHelper.vp2px(4, mContext);
     }
 
     @Override
     public void onDraw(Component component, Canvas canvas) {
-        mPaint.setStyle(Paint.Style.STROKE_STYLE);
-        canvas.drawArc(rectF, new Arc(180, endAngle, false), mPaint);
+        canvas.save();
+        canvas.drawCircle(mWidth / 2, mWidth / 2, mWidth / 4, mPaint);
 
-        mPaint.setStyle(Paint.Style.FILL_STYLE);
-        if (isSmileLeft) {
-            canvas.drawCircle(mPadding + mEyeWidth + mEyeWidth / 2, mWidth / 3, mEyeWidth, mPaint);
+        for (int i = 0; i < 360; i += 40) {
+
+            int angle = (int) (mAnimatedValue * 40 + i);
+            float initialX = (float) ((mWidth / 4) * Math.cos(angle * Math.PI / 180));
+            float initialY = (float) ((mWidth / 4) * Math.sin(angle * Math.PI / 180));
+            float finalX = (float) ((mWidth / 4 + mSpikeLength) * Math.cos(angle * Math.PI / 180));
+            float finalY = (float) ((mWidth / 4 + mSpikeLength) * Math.sin(angle * Math.PI / 180));
+            canvas.drawLine(mWidth / 2 - initialX, mWidth / 2 - initialY, mWidth / 2 - finalX,
+                    mWidth / 2 - finalY, mSpikePaint);
         }
-        if (isSmileRight) {
-            canvas.drawCircle(mWidth - mPadding - mEyeWidth - mEyeWidth / 2, mWidth / 3, mEyeWidth, mPaint);
-        }
+        canvas.restore();
     }
 
     public void startAnim() {
@@ -95,10 +95,8 @@ public class SuccessToastView extends Component implements Component.EstimateSiz
 
     public void stopAnim() {
         if (valueAnimator != null) {
-            isSmileLeft = false;
-            isSmileRight = false;
-            mAnimatedValue = 0f;
             valueAnimator.end();
+            invalidate();
         }
     }
 
@@ -106,25 +104,12 @@ public class SuccessToastView extends Component implements Component.EstimateSiz
         valueAnimator = ValueAnimator.ofFloat(startF, endF);
         valueAnimator.setDuration(time);
         valueAnimator.setCurveType(Animator.CurveType.LINEAR);
+        valueAnimator.setLoopedCount(ValueAnimator.INFINITE);
 
         valueAnimator.setValueUpdateListener(new AnimatorValue.ValueUpdateListener() {
             @Override
             public void onUpdate(AnimatorValue animatorValue, float v) {
                 mAnimatedValue = v;
-                if (mAnimatedValue < 0.5) {
-                    isSmileLeft = false;
-                    isSmileRight = false;
-                    endAngle = -360 * (mAnimatedValue);
-                } else if (mAnimatedValue > 0.55 && mAnimatedValue < 0.7) {
-                    endAngle = -180;
-                    isSmileLeft = true;
-                    isSmileRight = false;
-                } else {
-                    endAngle = -180;
-                    isSmileLeft = true;
-                    isSmileRight = true;
-                }
-
                 invalidate();
             }
         });

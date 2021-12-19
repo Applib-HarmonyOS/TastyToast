@@ -51,7 +51,7 @@ public class ErrorToastView extends Component implements Component.EstimateSizeL
     private void initialize() {
         mWidth = getWidth();
         mPadding = AttrHelper.vp2px(10, mContext);
-        mEyeWidth =  AttrHelper.vp2px(3, mContext);
+        mEyeWidth = AttrHelper.vp2px(3, mContext);
         setEstimateSizeListener(this);
         addDrawTask(this);
     }

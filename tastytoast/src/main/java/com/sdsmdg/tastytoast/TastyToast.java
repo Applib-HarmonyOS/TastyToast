@@ -6,7 +6,6 @@ import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringSystem;
 import ohos.agp.colors.RgbPalette;
 import ohos.agp.components.Component;
-import ohos.agp.components.DirectionalLayout;
 import ohos.agp.components.LayoutScatter;
 import ohos.agp.components.Text;
 import ohos.agp.components.element.ShapeElement;
@@ -32,7 +31,8 @@ public class TastyToast {
     static WarningToastView warningToastView;
     static ErrorToastView errorToastView;
     static InfoToastView infoToastView;
-
+    static DefaultToastView defaultToastView;
+    static ConfusingToastView confusingToastView;
 
 
     public static ToastDialog makeText(Context context, String msg, int length, int type) {
@@ -105,7 +105,6 @@ public class TastyToast {
                 toast.setComponent(layout);
                 break;
             }
-
             case 4: {
                 Component layout = LayoutScatter.getInstance(context).
                         parse(ResourceTable.Layout_info_toast_layout, null, false);
@@ -114,6 +113,31 @@ public class TastyToast {
                 infoToastView = (InfoToastView) layout.findComponentById(ResourceTable.Id_infoView);
                 infoToastView.startAnim();
                 text.setBackground(new ShapeElement(context, ResourceTable.Graphic_info_toast));
+                text.setTextColor(new Color(RgbPalette.parse("#FFFFFF")));
+                toast.setComponent(layout);
+                break;
+            }
+            case 5: {
+                Component layout = LayoutScatter.getInstance(context).
+                        parse(ResourceTable.Layout_default_toast_layout, null, false);
+                Text text = (Text) layout.findComponentById(ResourceTable.Id_toastMessage);
+                text.setText(msg);
+                defaultToastView = (DefaultToastView) layout.findComponentById(ResourceTable.Id_defaultView);
+                defaultToastView.startAnim();
+                text.setBackground(new ShapeElement(context, ResourceTable.Graphic_default_toast));
+                text.setTextColor(new Color(RgbPalette.parse("#FFFFFF")));
+                toast.setComponent(layout);
+                break;
+            }
+
+            case 6: {
+                Component layout = LayoutScatter.getInstance(context).
+                        parse(ResourceTable.Layout_confusing_toast_layout, null, false);
+                Text text = (Text) layout.findComponentById(ResourceTable.Id_toastMessage);
+                text.setText(msg);
+                confusingToastView = (ConfusingToastView) layout.findComponentById(ResourceTable.Id_confusingView);
+                confusingToastView.startAnim();
+                text.setBackground(new ShapeElement(context, ResourceTable.Graphic_confusing_toast));
                 text.setTextColor(new Color(RgbPalette.parse("#FFFFFF")));
                 toast.setComponent(layout);
                 break;

@@ -42,6 +42,22 @@ public class MainAbilitySlice extends AbilitySlice {
                         TastyToast.INFO);
             }
         });
+
+        findComponentById(ResourceTable.Id_button5).setClickedListener(new Component.ClickedListener() {
+            @Override
+            public void onClick(Component component) {
+                TastyToast.makeText(getApplicationContext(), "This is Default Toast", TastyToast.LENGTH_LONG,
+                        TastyToast.DEFAULT);
+            }
+        });
+
+        findComponentById(ResourceTable.Id_button6).setClickedListener(new Component.ClickedListener() {
+            @Override
+            public void onClick(Component component) {
+                TastyToast.makeText(getApplicationContext(), "I don't Know !", TastyToast.LENGTH_LONG,
+                        TastyToast.CONFUSING);
+            }
+        });
     }
 
     @Override
