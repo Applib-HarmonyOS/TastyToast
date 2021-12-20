@@ -19,6 +19,8 @@ public class TastyToast {
     public static final int LENGTH_SHORT = 1000;
     public static final int LENGTH_LONG = 2000;
 
+    public static final String WHITE = "#FFFFFF";
+
 
     public static final int SUCCESS = 1;
     public static final int WARNING = 2;
@@ -49,7 +51,7 @@ public class TastyToast {
                 successToastView = (SuccessToastView) layout.findComponentById(ResourceTable.Id_successView);
                 successToastView.startAnim();
                 text.setBackground(new ShapeElement(context, ResourceTable.Graphic_success_toast));
-                text.setTextColor(new Color(RgbPalette.parse("#FFFFFF")));
+                text.setTextColor(new Color(RgbPalette.parse(WHITE)));
                 toast.setComponent(layout);
                 break;
             }
@@ -90,7 +92,7 @@ public class TastyToast {
                 t.start();
 
                 text.setBackground(new ShapeElement(context, ResourceTable.Graphic_warning_toast));
-                text.setTextColor(new Color(RgbPalette.parse("#FFFFFF")));
+                text.setTextColor(new Color(RgbPalette.parse(WHITE)));
                 toast.setComponent(layout);
                 break;
             }
@@ -102,7 +104,7 @@ public class TastyToast {
                 errorToastView = (ErrorToastView) layout.findComponentById(ResourceTable.Id_errorView);
                 errorToastView.startAnim();
                 text.setBackground(new ShapeElement(context, ResourceTable.Graphic_error_toast));
-                text.setTextColor(new Color(RgbPalette.parse("#FFFFFF")));
+                text.setTextColor(new Color(RgbPalette.parse(WHITE)));
                 toast.setComponent(layout);
                 break;
             }
@@ -114,7 +116,7 @@ public class TastyToast {
                 infoToastView = (InfoToastView) layout.findComponentById(ResourceTable.Id_infoView);
                 infoToastView.startAnim();
                 text.setBackground(new ShapeElement(context, ResourceTable.Graphic_info_toast));
-                text.setTextColor(new Color(RgbPalette.parse("#FFFFFF")));
+                text.setTextColor(new Color(RgbPalette.parse(WHITE)));
                 toast.setComponent(layout);
                 break;
             }
@@ -126,7 +128,7 @@ public class TastyToast {
                 defaultToastView = (DefaultToastView) layout.findComponentById(ResourceTable.Id_defaultView);
                 defaultToastView.startAnim();
                 text.setBackground(new ShapeElement(context, ResourceTable.Graphic_default_toast));
-                text.setTextColor(new Color(RgbPalette.parse("#FFFFFF")));
+                text.setTextColor(new Color(RgbPalette.parse(WHITE)));
                 toast.setComponent(layout);
                 break;
             }
@@ -139,7 +141,7 @@ public class TastyToast {
                 confusingToastView = (ConfusingToastView) layout.findComponentById(ResourceTable.Id_confusingView);
                 confusingToastView.startAnim();
                 text.setBackground(new ShapeElement(context, ResourceTable.Graphic_confusing_toast));
-                text.setTextColor(new Color(RgbPalette.parse("#FFFFFF")));
+                text.setTextColor(new Color(RgbPalette.parse(WHITE)));
                 toast.setComponent(layout);
                 break;
             }
