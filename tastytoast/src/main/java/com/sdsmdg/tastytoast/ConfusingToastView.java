@@ -1,24 +1,22 @@
 package com.sdsmdg.tastytoast;
 
-import android.animation.ValueAnimator;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.RectF;
-import android.util.AttributeSet;
-import android.view.View;
-import android.view.animation.LinearInterpolator;
+import ohos.agp.animation.Animator;
+import ohos.agp.animation.AnimatorValue;
+import ohos.agp.colors.RgbPalette;
+import ohos.agp.components.AttrHelper;
+import ohos.agp.components.AttrSet;
+import ohos.agp.components.Component;
+import ohos.agp.render.*;
+import ohos.agp.utils.Color;
+import ohos.agp.utils.RectFloat;
+import ohos.app.Context;
+import ohos.media.image.PixelMap;
+import ohos.media.image.common.PixelFormat;
+import ohos.media.image.common.Size;
 
-/**
- * Created by Anas Altair on 8/31/2016.
- * Modified by rahul on 16/09/2016
- */
-public class ConfusingToastView extends View {
+public class ConfusingToastView extends Component implements Component.EstimateSizeListener, Component.DrawTask {
 
-    Bitmap eye;
+    PixelMap eye;
     ValueAnimator valueAnimator;
     float angle = 0f;
     private Paint mPaint;
@@ -27,70 +25,89 @@ public class ConfusingToastView extends View {
 
     public ConfusingToastView(Context context) {
         super(context);
+        initialize();
     }
 
-    public ConfusingToastView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public ConfusingToastView(Context context, AttrSet attrSet) {
+        super(context, attrSet);
+        initialize();
     }
 
-    public ConfusingToastView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public ConfusingToastView(Context context, AttrSet attrSet, String styleName) {
+        super(context, attrSet, styleName);
+        initialize();
     }
+
+    public ConfusingToastView(Context context, AttrSet attrSet, int resId) {
+        super(context, attrSet, resId);
+        initialize();
+    }
+
+    private void initialize() {
+        mWidth = getWidth();
+        mHeight = getHeight();
+        setEstimateSizeListener(this);
+        addDrawTask(this);
+    }
+
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        mWidth = getMeasuredWidth();
-        mHeight = getMeasuredHeight();
+    public boolean onEstimateSize(int i, int i1) {
         initPaint();
         initPath();
+        return false;
     }
 
     private void initPaint() {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setColor(Color.parseColor("#FE9D4D"));
+        mPaint.setStyle(Paint.Style.STROKE_STYLE);
+        mPaint.setColor(new Color(RgbPalette.parse("#FE9D4D")));
     }
 
     private void initPath() {
         Path mPath = new Path();
-        RectF rectF = new RectF(mWidth / 2f - dip2px(1.5f), mHeight / 2f - dip2px(1.5f)
+        RectFloat rectF = new RectFloat(mWidth / 2f - dip2px(1.5f), mHeight / 2f - dip2px(1.5f)
                 , mWidth / 2f + dip2px(1.5f), mHeight / 2f + dip2px(1.5f));
         mPath.addArc(rectF, 180f, 180f);
-        rectF.set(rectF.left - dip2px(3), rectF.top - dip2px(1.5f), rectF.right, rectF.bottom + dip2px(1.5f));
+        rectF.modify(rectF.left - dip2px(3), rectF.top - dip2px(1.5f), rectF.right, rectF.bottom + dip2px(1.5f));
         mPath.addArc(rectF, 0f, 180f);
-        rectF.set(rectF.left, rectF.top - dip2px(1.5f), rectF.right + dip2px(3), rectF.bottom + dip2px(1.5f));
+        rectF.modify(rectF.left, rectF.top - dip2px(1.5f), rectF.right + dip2px(3), rectF.bottom + dip2px(1.5f));
         mPath.addArc(rectF, 180f, 180f);
-        rectF.set(rectF.left - dip2px(3), rectF.top - dip2px(1.5f), rectF.right, rectF.bottom + dip2px(1.5f));
+        rectF.modify(rectF.left - dip2px(3), rectF.top - dip2px(1.5f), rectF.right, rectF.bottom + dip2px(1.5f));
         mPath.addArc(rectF, 0f, 180f);
 
-        eye = Bitmap.createBitmap((int) mWidth, (int) mHeight, Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(eye);
+
+        PixelMap.InitializationOptions options = new PixelMap.InitializationOptions();
+        options.size = new Size((int) mWidth, (int) mHeight);
+        options.pixelFormat = PixelFormat.ARGB_8888;
+
+        eye = PixelMap.create(options);
+        Canvas c = new Canvas(new Texture(eye));
         mPaint.setStrokeWidth(dip2px(1.7f));
         c.drawPath(mPath, mPaint);
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+    public float dip2px(float dpValue) {
+        return AttrHelper.vp2px(dpValue, mContext);
+    }
 
+    @Override
+    public void onDraw(Component component, Canvas canvas) {
         canvas.save();
         canvas.rotate(angle, mWidth / 4f, mHeight * 2f / 5f);
-        canvas.drawBitmap(eye, mWidth / 4f - (eye.getWidth() / 2f), mHeight * 2f / 5f - (eye.getHeight() / 2f), mPaint);
+        canvas.drawPixelMapHolder(new PixelMapHolder(eye), mWidth / 4f - (eye.getImageInfo().size.width / 2f),
+                mHeight * 2f / 5f - (eye.getImageInfo().size.height / 2f), mPaint);
+
         canvas.restore();
         canvas.save();
         canvas.rotate(angle, mWidth * 3f / 4f, mHeight * 2f / 5f);
-        canvas.drawBitmap(eye, mWidth * 3f / 4f - (eye.getWidth() / 2f), mHeight * 2f / 5f - (eye.getHeight() / 2f), mPaint);
+        canvas.drawPixelMapHolder(new PixelMapHolder(eye), mWidth * 3f / 4f - (eye.getImageInfo().size.width / 2f),
+                mHeight * 2f / 5f - (eye.getImageInfo().size.height / 2f), mPaint);
         canvas.restore();
 
         mPaint.setStrokeWidth(dip2px(2f));
         canvas.drawLine(mWidth / 4f, mHeight * 3f / 4f, mWidth * 3f / 4f, mHeight * 3f / 4f, mPaint);
-    }
-
-    public float dip2px(float dpValue) {
-        final float scale = getContext().getResources().getDisplayMetrics().density;
-        return dpValue * scale;
     }
 
     public void startAnim() {
@@ -100,25 +117,22 @@ public class ConfusingToastView extends View {
 
     public void stopAnim() {
         if (valueAnimator != null) {
-            clearAnimation();
-
             valueAnimator.end();
-            postInvalidate();
+            invalidate();
         }
     }
 
     private ValueAnimator startViewAnim(float startF, final float endF, long time) {
         valueAnimator = ValueAnimator.ofFloat(startF, endF);
         valueAnimator.setDuration(time);
-        valueAnimator.setInterpolator(new LinearInterpolator());
-        valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        valueAnimator.setRepeatMode(ValueAnimator.RESTART);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+        valueAnimator.setCurveType(Animator.CurveType.LINEAR);
+        valueAnimator.setLoopedCount(ValueAnimator.INFINITE);
 
+        valueAnimator.setValueUpdateListener(new AnimatorValue.ValueUpdateListener() {
+            @Override
+            public void onUpdate(AnimatorValue animatorValue, float v) {
                 angle += 4;
-                postInvalidate();
+                invalidate();
             }
         });
 

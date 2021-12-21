@@ -1,22 +1,21 @@
 package com.sdsmdg.tastytoast;
 
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.view.View;
+import ohos.agp.colors.RgbPalette;
+import ohos.agp.components.AttrHelper;
+import ohos.agp.components.AttrSet;
+import ohos.agp.components.Component;
+import ohos.agp.render.Arc;
+import ohos.agp.render.Canvas;
+import ohos.agp.render.Paint;
+import ohos.agp.utils.Color;
+import ohos.agp.utils.RectFloat;
+import ohos.app.Context;
 
-/**
- * Created by rahul on 25/7/16.
- */
-public class WarningToastView extends View {
+public class WarningToastView extends Component implements Component.EstimateSizeListener, Component.DrawTask {
 
-    RectF rectFOne = new RectF();
-    RectF rectFTwo = new RectF();
-    RectF rectFThree = new RectF();
+    RectFloat rectFOne = new RectFloat();
+    RectFloat rectFTwo = new RectFloat();
+    RectFloat rectFThree = new RectFloat();
     private Paint mPaint;
     private float mWidth = 0f;
     private float mHeight = 0f;
@@ -27,73 +26,82 @@ public class WarningToastView extends View {
 
     public WarningToastView(Context context) {
         super(context);
+        initialize();
     }
 
-
-    public WarningToastView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public WarningToastView(Context context, AttrSet attrSet) {
+        super(context, attrSet);
+        initialize();
     }
 
-    public WarningToastView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public WarningToastView(Context context, AttrSet attrSet, String styleName) {
+        super(context, attrSet, styleName);
+        initialize();
     }
+
+    public WarningToastView(Context context, AttrSet attrSet, int resId) {
+        super(context, attrSet, resId);
+        initialize();
+    }
+
+    private void initialize() {
+        mWidth = getWidth();
+        mHeight = getHeight();
+        mPadding = AttrHelper.vp2px(2, mContext);
+        mPaddingBottom = mPadding * 2;
+        mStrokeWidth = AttrHelper.vp2px(2, mContext);
+        setEstimateSizeListener(this);
+        addDrawTask(this);
+    }
+
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    public boolean onEstimateSize(int i, int i1) {
         initPaint();
         initRect();
-        mHeight = getMeasuredHeight();
-        mWidth = getMeasuredWidth();
-        mPadding = convertDpToPixel(2);
-        mPaddingBottom = mPadding * 2;
-        mStrokeWidth = convertDpToPixel(2);
+        return false;
     }
 
     private void initPaint() {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setColor(Color.parseColor("#f0ad4e"));
+        mPaint.setStyle(Paint.Style.STROKE_STYLE);
+        mPaint.setColor(new Color(RgbPalette.parse("#f0ad4e")));
         mPaint.setStrokeWidth(mStrokeWidth);
     }
 
     private void initRect() {
-        rectFOne = new RectF(mPadding, 0, mWidth - mPadding, mWidth - mPaddingBottom);
-        rectFTwo = new RectF((float) (1.5 * mPadding), convertDpToPixel(6) + mPadding +
-                mHeight / 3, mPadding + convertDpToPixel(9), convertDpToPixel(6) + mPadding + mHeight / 2);
-        rectFThree = new RectF(mPadding + convertDpToPixel(9), convertDpToPixel(3) + mPadding +
-                mHeight / 3, mPadding + convertDpToPixel(18), convertDpToPixel(3) + mPadding + mHeight / 2);
+        rectFOne = new RectFloat(mPadding, 0, mWidth - mPadding, mWidth - mPaddingBottom);
+        rectFTwo = new RectFloat((float) (1.5 * mPadding), AttrHelper.vp2px(6, mContext) + mPadding +
+                mHeight / 3, mPadding + AttrHelper.vp2px(9, mContext), AttrHelper.vp2px(6, mContext) + mPadding + mHeight / 2);
+        rectFThree = new RectFloat(mPadding + AttrHelper.vp2px(9, mContext), AttrHelper.vp2px(3, mContext) + mPadding +
+                mHeight / 3, mPadding + AttrHelper.vp2px(18, mContext), AttrHelper.vp2px(3, mContext) + mPadding + mHeight / 2);
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        mPaint.setStyle(Paint.Style.STROKE);
-        canvas.drawArc(rectFOne, 170, -144, false, mPaint);
-        canvas.drawLine(mWidth - convertDpToPixel(3) - mStrokeWidth, (float) (mPadding +
-                        mHeight / 6), mWidth - convertDpToPixel(3) - mStrokeWidth,
-                mHeight - convertDpToPixel(2) - mHeight / 4, mPaint);
+    public void onDraw(Component component, Canvas canvas) {
+        mPaint.setStyle(Paint.Style.STROKE_STYLE);
+        canvas.drawArc(rectFOne, new Arc(170, -144, false), mPaint);
 
-        canvas.drawLine(mWidth - convertDpToPixel(3) - mStrokeWidth - convertDpToPixel(8), (float) (mPadding +
-                        mHeight / 8.5), mWidth - convertDpToPixel(3) - mStrokeWidth - convertDpToPixel(8),
-                (float) (mHeight - convertDpToPixel(3) - mHeight / 2.5), mPaint);
+        canvas.drawLine(mWidth - AttrHelper.vp2px(3, mContext) - mStrokeWidth, (float) (mPadding +
+                        mHeight / 6), mWidth - AttrHelper.vp2px(3, mContext) - mStrokeWidth,
+                mHeight - AttrHelper.vp2px(2, mContext) - mHeight / 4, mPaint);
 
-        canvas.drawLine(mWidth - convertDpToPixel(3) - mStrokeWidth - convertDpToPixel(17), (float) (mPadding +
-                        mHeight / 10), mWidth - convertDpToPixel(3) - mStrokeWidth - convertDpToPixel(17),
-                (float) (mHeight - convertDpToPixel(3) - mHeight / 2.5), mPaint);
+        canvas.drawLine(mWidth - AttrHelper.vp2px(3, mContext) - mStrokeWidth - AttrHelper.vp2px(8, mContext), (float) (mPadding +
+                        mHeight / 8.5), mWidth - AttrHelper.vp2px(3, mContext) - mStrokeWidth - AttrHelper.vp2px(8, mContext),
+                (float) (mHeight - AttrHelper.vp2px(3, mContext) - mHeight / 2.5), mPaint);
 
-        canvas.drawLine(mWidth - convertDpToPixel(3) - mStrokeWidth - convertDpToPixel(26), (float) (mPadding +
-                        mHeight / 10), mWidth - convertDpToPixel(3) - mStrokeWidth - convertDpToPixel(26),
-                (float) (mHeight - convertDpToPixel(2) - mHeight / 2.5), mPaint);
+        canvas.drawLine(mWidth - AttrHelper.vp2px(3, mContext) - mStrokeWidth - AttrHelper.vp2px(17, mContext), (float) (mPadding +
+                        mHeight / 10), mWidth - AttrHelper.vp2px(3, mContext) - mStrokeWidth - AttrHelper.vp2px(17, mContext),
+                (float) (mHeight - AttrHelper.vp2px(3, mContext) - mHeight / 2.5), mPaint);
 
-        canvas.drawArc(rectFTwo, 170, 180, false, mPaint);
-        canvas.drawArc(rectFThree, 175, -150, false, mPaint);
+        canvas.drawLine(mWidth - AttrHelper.vp2px(3, mContext) - mStrokeWidth - AttrHelper.vp2px(26, mContext), (float) (mPadding +
+                        mHeight / 10), mWidth - AttrHelper.vp2px(3, mContext) - mStrokeWidth - AttrHelper.vp2px(26, mContext),
+                (float) (mHeight - AttrHelper.vp2px(2, mContext) - mHeight / 2.5), mPaint);
+
+
+        canvas.drawArc(rectFTwo, new Arc(170, 180, false), mPaint);
+        canvas.drawArc(rectFThree, new Arc(175, -150, false), mPaint);
     }
 
-    public float convertDpToPixel(float dp) {
-        DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
-        float px = dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
-        return px;
-    }
 }

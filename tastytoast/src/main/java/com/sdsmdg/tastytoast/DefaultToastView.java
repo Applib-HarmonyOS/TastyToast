@@ -1,18 +1,17 @@
 package com.sdsmdg.tastytoast;
 
-import android.animation.ValueAnimator;
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.util.AttributeSet;
-import android.view.View;
-import android.view.animation.LinearInterpolator;
+import ohos.agp.animation.Animator;
+import ohos.agp.animation.AnimatorValue;
+import ohos.agp.colors.RgbPalette;
+import ohos.agp.components.AttrHelper;
+import ohos.agp.components.AttrSet;
+import ohos.agp.components.Component;
+import ohos.agp.render.Canvas;
+import ohos.agp.render.Paint;
+import ohos.agp.utils.Color;
+import ohos.app.Context;
 
-/**
- * Created by rahul on 27/7/16.
- */
-public class DefaultToastView extends View {
+public class DefaultToastView extends Component implements Component.EstimateSizeListener, Component.DrawTask {
 
     ValueAnimator valueAnimator;
     float mAnimatedValue = 0f;
@@ -21,46 +20,58 @@ public class DefaultToastView extends View {
     private float mPadding = 0f;
     private float mSpikeLength;
 
-
     public DefaultToastView(Context context) {
         super(context);
+        initialize();
     }
 
-    public DefaultToastView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public DefaultToastView(Context context, AttrSet attrSet) {
+        super(context, attrSet);
+        initialize();
     }
 
-    public DefaultToastView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public DefaultToastView(Context context, AttrSet attrSet, String styleName) {
+        super(context, attrSet, styleName);
+        initialize();
     }
+
+    public DefaultToastView(Context context, AttrSet attrSet, int resId) {
+        super(context, attrSet, resId);
+        initialize();
+    }
+
+    private void initialize() {
+        mWidth = getWidth();
+        mPadding = AttrHelper.vp2px(5, mContext);
+        setEstimateSizeListener(this);
+        addDrawTask(this);
+    }
+
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    public boolean onEstimateSize(int i, int i1) {
         initPaint();
-        mWidth = getMeasuredWidth();
-        mPadding = dip2px(5);
+        return false;
     }
 
     private void initPaint() {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setColor(Color.parseColor("#222222"));
-        mPaint.setStrokeWidth(dip2px(2));
+        mPaint.setStyle(Paint.Style.STROKE_STYLE);
+        mPaint.setColor(new Color(RgbPalette.parse("#222222")));
+        mPaint.setStrokeWidth(AttrHelper.vp2px(2, mContext));
 
         mSpikePaint = new Paint();
         mSpikePaint.setAntiAlias(true);
-        mSpikePaint.setStyle(Paint.Style.STROKE);
-        mSpikePaint.setColor(Color.parseColor("#222222"));
-        mSpikePaint.setStrokeWidth(dip2px(4));
+        mSpikePaint.setStyle(Paint.Style.STROKE_STYLE);
+        mSpikePaint.setColor(new Color(RgbPalette.parse("#222222")));
+        mSpikePaint.setStrokeWidth(AttrHelper.vp2px(4, mContext));
 
-        mSpikeLength = dip2px(4);
+        mSpikeLength = AttrHelper.vp2px(4, mContext);
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+    public void onDraw(Component component, Canvas canvas) {
         canvas.save();
         canvas.drawCircle(mWidth / 2, mWidth / 2, mWidth / 4, mPaint);
 
@@ -77,7 +88,6 @@ public class DefaultToastView extends View {
         canvas.restore();
     }
 
-
     public void startAnim() {
         stopAnim();
         startViewAnim(0f, 1f, 2000);
@@ -85,25 +95,22 @@ public class DefaultToastView extends View {
 
     public void stopAnim() {
         if (valueAnimator != null) {
-            clearAnimation();
-
             valueAnimator.end();
-            postInvalidate();
+            invalidate();
         }
     }
 
     private ValueAnimator startViewAnim(float startF, final float endF, long time) {
         valueAnimator = ValueAnimator.ofFloat(startF, endF);
         valueAnimator.setDuration(time);
-        valueAnimator.setInterpolator(new LinearInterpolator());
-        valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        valueAnimator.setRepeatMode(ValueAnimator.RESTART);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+        valueAnimator.setCurveType(Animator.CurveType.LINEAR);
+        valueAnimator.setLoopedCount(ValueAnimator.INFINITE);
 
-                mAnimatedValue = (float) valueAnimator.getAnimatedValue();
-                postInvalidate();
+        valueAnimator.setValueUpdateListener(new AnimatorValue.ValueUpdateListener() {
+            @Override
+            public void onUpdate(AnimatorValue animatorValue, float v) {
+                mAnimatedValue = v;
+                invalidate();
             }
         });
 
@@ -112,10 +119,5 @@ public class DefaultToastView extends View {
 
         }
         return valueAnimator;
-    }
-
-    public int dip2px(float dpValue) {
-        final float scale = getContext().getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale);
     }
 }
